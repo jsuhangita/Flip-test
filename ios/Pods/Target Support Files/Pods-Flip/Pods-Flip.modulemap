@@ -1,6 +1,0 @@
-module Pods_Flip {
-  umbrella header "Pods-Flip-umbrella.h"
-
-  export *
-  module * { export * }
-}
