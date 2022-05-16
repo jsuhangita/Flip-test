@@ -5,6 +5,8 @@ import { TransactionDataTypes } from "../types/data.type";
 import theme from "../theme/theme";
 import {StackNavigationProp} from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
+import SearchBarSortComponent from "../components/SearchBarSort.component";
+import { sortAtoZ, sortZtoA } from "../helper/helper";
 
 
 type renderTypes = {
@@ -19,7 +21,8 @@ type TransactionListScreenProps = StackNavigationProp<any, any>;
 
 export default function TransactionListScreen() {
 
-  const [ transactionList,updateTransactionList ] = useState([]);
+  const [ transactionList,updateTransactionList ] = useState<Array<TransactionDataTypes>>([]);
+  const [ viewedList, updateViewedList ] = useState<Array<TransactionDataTypes>>([]);
   const navigation = useNavigation<TransactionListScreenProps>();
 
 
@@ -29,8 +32,30 @@ export default function TransactionListScreen() {
       const data = await response.json();
       const transformed:any = Object.values(data);
       updateTransactionList(transformed);
+      updateViewedList(transformed);
     }catch (e){
       Alert.alert("Oops!","Sorry Something Went Wrong...")
+    }
+  }
+
+  function _onSelectSortMethod(type:string){
+    switch (type){
+      case "ascending":{
+        const temp = transactionList.map((item)=>item);
+        const sorted:Array<any> = sortAtoZ(temp);
+        updateViewedList([...sorted]);
+        break;
+      }
+      case "descending":{
+        const temp = transactionList.map((item)=>item);
+        const sorted:Array<any> = sortZtoA(temp);
+        updateViewedList([...sorted]);
+        break;
+      }
+      default:{
+        updateViewedList([...transactionList]);
+        break;
+      }
     }
   }
 
@@ -51,12 +76,17 @@ export default function TransactionListScreen() {
   },[])
   return(
     <SafeAreaView style={styles.container}>
+      <SearchBarSortComponent
+        onSelectSortMethod={_onSelectSortMethod}
+      />
       <FlatList
         contentContainerStyle={{
           padding:theme.padding.normal
         }}
-        data={transactionList}
-        renderItem={_renderList}/>
+        data={viewedList}
+        renderItem={_renderList}
+        keyExtractor={(item:TransactionDataTypes,index)=>`${item.id}`}
+      />
     </SafeAreaView>
   )
 }

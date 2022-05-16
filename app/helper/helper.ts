@@ -5,3 +5,13 @@ export function rupiahFormatter(amount:number){
   const rupiah:any = 'Rp ' + convert.join('.').split('').reverse().join('')
   return rupiah
 }
+
+export function sortAtoZ(array:Array<any>){
+  array.sort((a, b) => a.beneficiary_name.localeCompare(b.beneficiary_name))
+  return array;
+}
+
+export function sortZtoA(array:Array<any>){
+  array.sort((a, b) => b.beneficiary_name.localeCompare(a.beneficiary_name))
+  return array;
+}

@@ -6,6 +6,7 @@ type Theme ={
     container_background_color:string,
     text_primary:string,
     white:string,
+    modal_background_color:string,
   },
   padding:{
     small:number,
@@ -32,6 +33,7 @@ const theme: Theme = {
     status_success:'#6FB388',
     container_background_color:"#F5FAF8",
     text_primary:"black",
+    modal_background_color:"rgba(0,0,0,0.8)",
 
     white:"white",
   },
