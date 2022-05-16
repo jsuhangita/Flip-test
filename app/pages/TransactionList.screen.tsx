@@ -6,7 +6,7 @@ import theme from "../theme/theme";
 import {StackNavigationProp} from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import SearchBarSortComponent from "../components/SearchBarSort.component";
-import { sortAtoZ, sortZtoA } from "../helper/helper";
+import { sortAtoZ, sortNewest, sortOldest, sortZtoA } from "../helper/helper";
 
 
 type renderTypes = {
@@ -23,6 +23,7 @@ export default function TransactionListScreen() {
 
   const [ transactionList,updateTransactionList ] = useState<Array<TransactionDataTypes>>([]);
   const [ viewedList, updateViewedList ] = useState<Array<TransactionDataTypes>>([]);
+  const [ searchText,updateSearchText ] = useState<String>("");
   const navigation = useNavigation<TransactionListScreenProps>();
 
 
@@ -39,24 +40,58 @@ export default function TransactionListScreen() {
   }
 
   function _onSelectSortMethod(type:string){
+    const usedArray = searchText===""?transactionList:viewedList;
     switch (type){
       case "ascending":{
-        const temp = transactionList.map((item)=>item);
+        const temp = usedArray.map((item)=>item);
         const sorted:Array<any> = sortAtoZ(temp);
         updateViewedList([...sorted]);
         break;
       }
       case "descending":{
-        const temp = transactionList.map((item)=>item);
+        const temp = usedArray.map((item)=>item);
         const sorted:Array<any> = sortZtoA(temp);
         updateViewedList([...sorted]);
         break;
       }
+      case "newest":{
+        const temp = usedArray.map((item)=>item);
+        const sorted:Array<any> = sortNewest(temp);
+        updateViewedList([...sorted]);
+       break;
+      }
+      case "oldest":{
+        const temp = usedArray.map((item)=>item);
+        const sorted:Array<any> = sortOldest(temp);
+        updateViewedList([...sorted]);
+        break;
+      }
       default:{
-        updateViewedList([...transactionList]);
+        updateViewedList([...usedArray]);
         break;
       }
     }
+  }
+
+  function _onSearchTextChange(text:string){
+    const temp = transactionList.map((item)=>item);
+    const filtered = temp.filter((item)=>{
+      const { beneficiary_name='',beneficiary_bank="",sender_bank="",amount=0 } = item;
+      if(beneficiary_name.toLowerCase().search(text.toLowerCase())>-1){
+        return true
+      }
+      if(beneficiary_bank.toLowerCase().search(text.toLowerCase())>-1){
+        return true
+      }
+      if(sender_bank.toLowerCase().search(text.toLowerCase())>-1){
+        return true
+      }
+      if(amount.toString().search(text.toLowerCase())>-1){
+        return true
+      }
+    })
+    updateSearchText(text)
+    updateViewedList([...filtered]);
   }
 
   function _renderList(param:renderTypes){
@@ -78,6 +113,7 @@ export default function TransactionListScreen() {
     <SafeAreaView style={styles.container}>
       <SearchBarSortComponent
         onSelectSortMethod={_onSelectSortMethod}
+        onSearchTextChange={_onSearchTextChange}
       />
       <FlatList
         contentContainerStyle={{

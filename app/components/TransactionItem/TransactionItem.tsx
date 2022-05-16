@@ -21,11 +21,11 @@ export default function TransactionItem(
     sender_bank="",
     beneficiary_bank="",
     beneficiary_name="",
-    completed_at="",
+    created_at="",
     amount=0,
     status="PENDING",
   } = data;
-  const date = new Date(completed_at);
+  const date = new Date(created_at);
   return(
     <TouchableOpacity onPress={()=>{onPress(data)}} style={styles.container}>
       <View style={{

@@ -28,6 +28,7 @@ export default function SearchBarSortComponent(
         <TextInput
           numberOfLines={1}
           placeholder={"Cari nama, bank, atau nominal"}
+          onChangeText={onSearchTextChange}
         />
       </View>
       <TouchableOpacity onPress={()=>{updateModalVisible(true)}} style={{flex:1.4}}>
