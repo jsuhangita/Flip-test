@@ -6,7 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from '@react-navigation/native';
 import { TransactionDataTypes } from "../types/data.type";
 import Icon from "../components/base/Icon/Icon.component";
-import { rupiahFormatter } from "../helper/helper";
+import { dateFormatter, rupiahFormatter } from "../helper/helper";
 
 type TransactionListScreenProps = {
   navigation:StackNavigationProp<any, any>,
@@ -80,7 +80,7 @@ export default function TransactionDetailScreen({navigation,route}:TransactionLi
                 WAKTU DIBUAT
               </Text>
               <Text medium>
-                {date.toLocaleString('IND', { day:'numeric',month: 'long',year:'numeric' })}
+                {dateFormatter(created_at)}
               </Text>
             </View>
           </View>

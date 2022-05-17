@@ -4,7 +4,7 @@ import theme from "../../theme/theme";
 import { TransactionDataTypes } from "../../types/data.type";
 import Text from "../base/Text/Text.component";
 import Icon from "../base/Icon/Icon.component";
-import { rupiahFormatter } from "../../helper/helper";
+import { dateFormatter, rupiahFormatter } from "../../helper/helper";
 
 type TransactionItemProps = {
   data:TransactionDataTypes,
@@ -25,7 +25,7 @@ export default function TransactionItem(
     amount=0,
     status="PENDING",
   } = data;
-  const date = new Date(created_at);
+
   return(
     <TouchableOpacity onPress={()=>{onPress(data)}} style={styles.container}>
       <View style={{
@@ -44,7 +44,7 @@ export default function TransactionItem(
           {beneficiary_name.toUpperCase()}
         </Text>
         <Text>
-          {rupiahFormatter(amount)} • {date.toLocaleString('IND', { day:'numeric',month: 'long',year:'numeric' })}
+          {rupiahFormatter(amount)} • {dateFormatter(created_at)}
         </Text>
       </View>
       <View style={{flex:3.5}}>

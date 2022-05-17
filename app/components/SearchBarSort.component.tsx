@@ -23,7 +23,7 @@ export default function SearchBarSortComponent(
   const [ selectedSort, updateSelectedSort ] = useState<sortItemType>(sortList[0]);
   return(
     <View style={styles.barContainer}>
-      <View style={{flexDirection:'row',flex:2}}>
+      <View style={{flexDirection:'row',flex:2,alignItems:'center'}}>
         <Icon name={"search"} size={20} style={{marginRight:theme.padding.small}}/>
         <TextInput
           numberOfLines={1}
